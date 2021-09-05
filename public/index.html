@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en" class="min-h-screen bg-gray-900">
+<html lang="en" class="min-h-screen bg-black">
 <head>
     <meta charset="utf-8">
     <link rel="icon" href="%PUBLIC_URL%/icon/favicon.ico">
@@ -23,7 +23,29 @@
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/icon/logo192.png">
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
     <title>Streaming Payments | Plutonium</title>
+    <script>
+      // Gets the Mobile Nav icon by its ID
+      let bars = document.getElementById('bars');
+
+      // Gets the Mobile Nav container
+      let mobileMenu = document.getElementById('mobileMenu');
+
+      // Displays the Mobile Nav when clicked and changes the Nav Icon from three bars to an 'X'
+      bars.addEventListener('click', function(){
+        mobileMenu.classList.toggle('show');
+        bars.classList.toggle('fa-times');
+      });
+      </script>
     <style>
+
+        html {
+            height: 100%;
+        }
+
+        .show {
+          display: block;
+        }
+
         .loader {
             border: 10px solid transparent;
             border-top: 10px solid #18a2d9;
@@ -43,6 +65,50 @@
 </head>
 <body>
 <noscript>Please enable JavaScript to run this app.</noscript>
+
+
+<nav class="p-4 text-white grid-cols-3">
+  <div class="flex justify-between items-center">
+  <div class="flex items-center pl-8">
+    <i class="text-2xl fas fa-campground"></i>
+    <h1 class=" tracking-wide font-bold text-3xl pl-4">Plutonium Network</h1>
+  </div>
+  
+  <!-- MOBILE NAV ICON -->
+  <div class="md:hidden block absolute top-4 right-8 fixed">
+    <button aria-label="navigation" type="button"  class="md:hidden text-gray-200 transition duration-300 focus:outline-none focus:text-white hover:text-white"><i class="fas fa-bars text-3xl" id="bars"></i>            </button>
+  </div>
+  
+  <!-- NAVIGATION - LARGE SCREENS -->
+<div class="hidden md:flex">
+  <ul class="hidden md:flex">
+    <li class="text-lg pr-8 "><a href="" class="transition duration-300 focus:outline-none focus:text-primary focus:underline hover:underline hover:text-primary" style="text-underline-offset: 8px;">Home</a></li>
+    <li class="text-lg pr-8"><a href="" class="transition duration-300 focus:outline-none focus:text-primary focus:underline hover:underline hover:text-primary" style="text-underline-offset: 8px;">Documentation</a></li>
+    <li class="text-lg pr-8"><a href="" class="transition duration-300 focus:outline-none focus:text-primary focus:underline hover:underline hover:text-primary" style="text-underline-offset: 8px;">Whitepaper</a></li>
+    <li class="text-lg pr-8"><a href="" class="transition duration-300 focus:outline-none focus:text-primary focus:underline hover:underline hover:text-primary" style="text-underline-offset: 8px;">Contact Us</a></li>
+  </ul>
+  </div>
+
+  <div class="hidden md:flex">
+    <!-- <a href="#"><i class="fab fa-facebook text-2xl pr-8 transition duration-300 focus:text-yellow-500 hover:text-yellow-500"></i></a>
+    <a href="#"><i class="fab fa-linkedin text-2xl pr-8 transition duration-300 focus:text-yellow-500 hover:text-yellow-500"></i></a>
+    <a href="#"><i class="fab fa-instagram text-2xl pr-8 transition duration-300 focus:text-yellow-500 hover:text-yellow-500"></i></a>
+    <a href="#"><i class="fab fa-twitter text-2xl pr-8 transition duration-300 focus:text-yellow-500 hover:text-yellow-500"></i></a>
+ -->
+  </div>
+    
+  <!-- MOBILE MENU -->
+<div id="mobileMenu" class="hidden flex w-full mx-auto py-8 text-center">
+        <div class="flex flex-col justify-center items-center w-full">
+        <a href="#" class="block text-gray-200 cursor-pointer py-3 transition duration-300 focus:outline-none focus:text-primary focus:underline hover:underline hover:text-primary" style="text-underline-offset: 8px;">Home</a>
+        <a href="#" class="block text-gray-200 cursor-pointer mt-1 py-3 transition duration-300 focus:outline-none focus:text-primary focus:underline hover:underline hover:text-primary" style="text-underline-offset: 8px;">Documentation</a>
+        <a href="#" class="block text-gray-200 cursor-pointer mt-1 py-3 transition duration-300 focus:outline-none focus:text-primary focus:underline hover:underline hover:text-primary" style="text-underline-offset: 8px;">Whitepaper</a>
+          <a href="#" class="block text-gray-200 cursor-pointer mt-1 py-3 transition duration-300 focus:outline-none focus:text-primary focus:underline hover:underline hover:text-primary" style="text-underline-offset: 8px;">Contact Us</a>
+          </div>
+      </div>
+</nav>
+
+
 <div id="root">
     <div class="loader"></div>
 </div>

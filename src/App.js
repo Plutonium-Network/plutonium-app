@@ -58,15 +58,16 @@ function App() {
     }, [setSelectedWallet, urlWallet])
 
     return (
+
         <div>
-            <div className={"mx-auto bg-blend-darken px-4 my-4"}>
+            <div className={"mx-auto"}>
                 <Logo src={logo}/>
                 {mainComponent(connected, selectedWallet)}
             </div>
             <ToastContainer hideProgressBar position="bottom-left" limit={3}/>
-            <Footer/>
+            
         </div>
+
     );
 }
-
 export default App;

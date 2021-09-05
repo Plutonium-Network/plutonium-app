@@ -21,16 +21,22 @@ export default function Stream(props: { data: StreamData, myAddress: string, id:
     const {myAddress, removeStream, onStatusUpdate, onCancel, onWithdraw, id} = props;
 
     const color = STREAM_STATUS_COLOR[status];
-
+    const max = (min, max) => Math.random() * (max - min) + min;
+    const Max = () => max(2.5, 3);
     const [streamed, setStreamed] = useState(getStreamed(start, end, amount))
     const [available, setAvailable] = useState(streamed - withdrawn);
+
+    const [yeildRate, setYeildRate] = useState(getYeildRate(start,end, amount))
+    const [aprCount, setAprCount] = useState(Max)
 
     const showWithdraw = ((status === STREAM_STATUS_STREAMING || (status === STREAM_STATUS_COMPLETE && withdrawn < amount)) && myAddress === receiver);
     const showCancel = (status === STREAM_STATUS_STREAMING || status === STREAM_STATUS_SCHEDULED) && myAddress === sender
     useEffect(() => {
         const interval = setInterval(() => {
             setStreamed(getStreamed(start, end, amount));
+            
             setAvailable(streamed - withdrawn);
+           
             const tmpStatus = updateStatus(status, start, end);
             if (tmpStatus !== status) {
                 onStatusUpdate(tmpStatus)
@@ -38,6 +44,15 @@ export default function Stream(props: { data: StreamData, myAddress: string, id:
         }, 1000)
         return () => clearInterval(interval);
     });
+
+    useEffect(() => {
+        const interval2 = setInterval(() => {
+            setYeildRate(getYeildRate(start, end, amount));
+            setAprCount(Max);
+        }, 5000)
+        return () => clearInterval(interval2);
+    });
+
 
     return (
         <dl className={`text-white my-4 grid gap-y-4 gap-x-2 grid-cols-3 p-4 bg-${color}-300 bg-opacity-10 hover:bg-opacity-20 shadow rounded-lg`}>
@@ -63,15 +78,32 @@ export default function Stream(props: { data: StreamData, myAddress: string, id:
                 (<>
                     <dt>Available<br/>
                         <sup className="text-xs text-gray-300 align-top">for withdrawal</sup></dt>
-                    <dd className="col-span-2">◎{available.toFixed(2)}</dd>
+                    <dd className="col-span-2">◎{available.toFixed(8)}</dd>
+                    <dt>Yeild Rewards<br/>
+                        <sup className="text-xs text-gray-300">earned by Reciever</sup></dt>
+                    <dd className="col-span-2">◎{(yeildRate*.4).toFixed(6)} ~ {(aprCount*.4).toFixed(2)}% Apr</dd>
                     <ActionButton title="Withdraw" action={onWithdraw}
                                   color={STREAM_STATUS_COLOR[STREAM_STATUS_STREAMING]}/>
                 </>)}
-                {showCancel && <ActionButton title={"Cancel"} action={onCancel}
-                                             color={STREAM_STATUS_COLOR[STREAM_STATUS_CANCELED]}/>}
+                {showCancel && (<>
+                <dt>Yeild Rewards<br/>
+                        <sup className="text-xs text-gray-300">earned by Creator</sup></dt>
+                    <dd className="col-span-2">◎{(yeildRate*.6).toFixed(6)}~ {(aprCount*.6).toFixed(2)}% Apr</dd>
+                    <ActionButton title={"Cancel"} action={onCancel}
+                                             color={STREAM_STATUS_COLOR[STREAM_STATUS_CANCELED]}/>
+                                             </>)}
             </>}
         </dl>
     )
+}
+
+export function getYeildRate(start: number, end: number, amount: number, timestamp?: number) {
+    timestamp = timestamp || getUnixTime(new Date());
+
+    if (timestamp < start) return 0
+    if (timestamp > end) return amount*(end-start)*0.0000000237;
+
+    return (timestamp - start) * amount * 0.0000000237;
 }
 
 export function getStreamed(start: number, end: number, amount: number, timestamp?: number) {
